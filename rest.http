@@ -1,31 +1,11 @@
 ###checking product api
-post http://localhost:8000/api/v1/product
+post http://localhost:8000/api/v1/user/register
 Content-Type: application/json
 
 {
     "name":"marich",
-    "price":5456,
-    "description":"just wow",
-    "category":"laptop"
+    "email":"5456@a.com",
+    "phone":"sfsdf",
+    "password":"justwow"
 }
 
-###checking product api
-get http://localhost:8000/api/v1/product/all-products
-
-###checking product api
-put http://localhost:8000/api/v1/product/65b4357cda3c650d8195aba9
-Content-Type: application/json
-
-{
-    "name": "Remove praveen and update marjina",
-      "description": "Praveen just wow",
-      "price": 100,
-      "rating": 0,
-      "category": "laptop"
-}
-
-###checking delete product api
-delete http://localhost:8000/api/v1/product/65b4357cda3c650d8195aba9
-
-###checking product api
-get http://localhost:8000/api/v1/product?keyword=pra
