@@ -1,11 +1,19 @@
-###checking product api
-post http://localhost:8000/api/v1/user/register
+###checking register api
+post http://localhost:8001/api/v1/user/register
 Content-Type: application/json
 
 {
-    "name":"marich",
-    "email":"5456@a.com",
-    "phone":"sfsdf",
+    "fName":"marich",
+    "lName":"marich",
+    "email":"a@a.com",
     "password":"justwow"
 }
 
+###checking login api
+post http://localhost:8001/api/v1/user/login
+Content-Type: application/json
+
+{
+    "email":"a@a.com",
+    "password":"justwow"
+}
