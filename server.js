@@ -13,9 +13,11 @@ dbConfig();
 
 // import API routers
 import userRouter from "./SRC/router/userRouter.js";
+import categoryRouter from "./SRC/router/categoryRouter.js";
 
 // creating APIS
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/category", categoryRouter);
 
 // listening to the port
 app.listen(process.env.PORT, () => {

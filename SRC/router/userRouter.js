@@ -8,6 +8,7 @@ import { comparePassword, hashPassword } from "../helper/bcryptHelper.js";
 const router = express.Router();
 import { v4 as uuidv4 } from "uuid";
 import { sendEmail, verifiedNotificationEmail } from "../helper/emailHelper.js";
+import { createJwts } from "../helper/jwtHelper.js";
 
 router.post("/register", async (req, res) => {
   try {
@@ -17,7 +18,6 @@ router.post("/register", async (req, res) => {
     req.body.emailValidationCode = uuidv4();
     console.log(req.body.emailValidationCode);
     const user = await createUser(req.body);
-    console.log(user);
 
     if (user?._id) {
       const url = `${process.env.ROOT_DOMAIN}/admin/verify-email?c=${user.emailValidationCode}&e=${user.email}`;
@@ -44,37 +44,38 @@ router.post("/register", async (req, res) => {
     });
   }
 });
-
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { password, email } = req.body;
     const user = await findUserByEmail(email);
 
     if (user?._id) {
-      console.log(user);
-      if (user?.isVerified != "true") {
+      if (user?.isVerified !== true) {
         return res.json({
           status: "error",
-          message: "you are not verified yet",
+          message:
+            "Your account has not been verified, Pelase check your emai and verify your account.",
         });
       }
       const isMatched = comparePassword(password, user.password);
       if (isMatched) {
         user.password = undefined;
+        const jwt = await createJwts({ email });
         return res.json({
-          status: "Success",
-          message: "Successfully Logged In",
+          status: "success",
+          message: "Logged in successfully",
           user,
+          ...jwt,
         });
       }
-    } else {
-      return res.json({
-        status: "error",
-        message: "Invalid login Credentials or you are not verified yet",
-      });
     }
+
+    res.json({
+      status: "error",
+      message: "Invalid login credintials.",
+    });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 
@@ -87,17 +88,16 @@ router.patch("/verify-email", async (req, res) => {
         emailValidationCode,
       },
       {
-        isVerified: true,
+        isVerified: "true",
         emailValidationCode: "",
       }
     );
     if (user?._id) {
-      return (
-        res.json({
-          status: "success",
-          message: "You have been verified, you may login now",
-        }) && verifiedNotificationEmail(user)
-      );
+      verifiedNotificationEmail(user);
+      return res.json({
+        status: "success",
+        message: "You have been verified, you may login now",
+      });
     } else {
       return res.json({
         status: "error",
