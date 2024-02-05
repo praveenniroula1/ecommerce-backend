@@ -14,9 +14,10 @@ dbConfig();
 // import API routers
 import userRouter from "./SRC/router/userRouter.js";
 import categoryRouter from "./SRC/router/categoryRouter.js";
+import { adminAuth } from "./SRC/auth-middlware/authMiddleware.js";
 
 // creating APIS
-app.use("/api/v1/user", userRouter);
+app.use("/api/v1/user", adminAuth, userRouter);
 app.use("/api/v1/category", categoryRouter);
 
 // listening to the port
