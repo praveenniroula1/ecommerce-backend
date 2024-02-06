@@ -109,4 +109,15 @@ router.patch("/verify-email", async (req, res) => {
   }
 });
 
+router.get("/", (req, res) => {
+  try {
+    res.json({
+      status: "success",
+      message: "Users information successfully fetched",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 export default router;

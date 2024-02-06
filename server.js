@@ -18,7 +18,7 @@ import { adminAuth } from "./SRC/auth-middlware/authMiddleware.js";
 
 // creating APIS
 app.use("/api/v1/user", adminAuth, userRouter);
-app.use("/api/v1/category", categoryRouter);
+app.use("/api/v1/category", adminAuth, categoryRouter);
 
 // listening to the port
 app.listen(process.env.PORT, () => {

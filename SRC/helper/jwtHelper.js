@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { insertSession } from "../session/sessionModel.js";
+import { deleteSession, insertSession } from "../session/sessionModel.js";
 import { updateOneUser } from "../models/userModels.js";
 
 export const generateAccessToken = async (payload) => {
@@ -29,4 +29,20 @@ export const createJwts = async (payload) => {
     accessJwt: await generateAccessToken(payload),
     refreshJwt: await generateRefreshToken(payload),
   };
+};
+
+export const verifyAccessJwt = (token) => {
+  try {
+  } catch (error) {
+    console.log(error.message);
+    if (message === "jwt expired") {
+      // delete session
+      deleteSession({
+        type: "jwt",
+        token,
+      });
+    }
+
+    return message;
+  }
 };
