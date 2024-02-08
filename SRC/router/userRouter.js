@@ -9,6 +9,7 @@ const router = express.Router();
 import { v4 as uuidv4 } from "uuid";
 import { sendEmail, verifiedNotificationEmail } from "../helper/emailHelper.js";
 import { createJwts } from "../helper/jwtHelper.js";
+import { adminAuth } from "../auth-middlware/authMiddleware.js";
 
 router.post("/register", async (req, res) => {
   try {
@@ -109,11 +110,13 @@ router.patch("/verify-email", async (req, res) => {
   }
 });
 
-router.get("/", (req, res) => {
+router.get("/", adminAuth, (req, res) => {
   try {
+    const user = req.adminInfo;
     res.json({
       status: "success",
       message: "Users information successfully fetched",
+      user,
     });
   } catch (error) {
     console.log(error);
