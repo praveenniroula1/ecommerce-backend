@@ -54,15 +54,17 @@ router.get("/:_id?", async (req, res) => {
 
 router.put("/", async (req, res) => {
   try {
-    const { _id } = req.body;
-    const hasChildCats = await hasChildCategoryById(_id);
-    if (hasChildCats) {
-      return res.json({
-        status: "error",
-        message:
-          "this one has child category, please delete or reassign to others",
-      });
+    if (req.body.parentId) {
+      const hasChildCats = await hasChildCategoryById(_id);
+      if (hasChildCats) {
+        return res.json({
+          status: "error",
+          message:
+            "this one has child category, please delete or reassign to others",
+        });
+      }
     }
+
     const categoryUpdate = await updateCategoryById(req.body);
     categoryUpdate?._id
       ? res.json({

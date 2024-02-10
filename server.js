@@ -14,11 +14,13 @@ dbConfig();
 // import API routers
 import userRouter from "./SRC/router/userRouter.js";
 import categoryRouter from "./SRC/router/categoryRouter.js";
+import paymentMethodRouter from "./SRC/router/paymentMethodRouter.js";
 import { adminAuth } from "./SRC/auth-middlware/authMiddleware.js";
 
 // creating APIS
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/category", categoryRouter);
+app.use("/api/v1/payment-method", paymentMethodRouter);
 
 // listening to the port
 app.listen(process.env.PORT, () => {

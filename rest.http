@@ -31,3 +31,6 @@ Content-Type: application/json
 ### get category
 GET http://localhost:8001/api/v1/category
 
+### get category
+GET http://localhost:8001/api/v1/payment-method
+
